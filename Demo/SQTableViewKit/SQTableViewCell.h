@@ -6,7 +6,8 @@
 //  Copyright © 2016年 qbshen. All rights reserved.
 //
 
-#import "SQTableViewDelegate.h"
+//#import "SQTableViewDelegate.h"
+#import "SQTableViewKit-Swift.h"
 
 @interface SQTableViewCell : SQTableViewBaseCell
 

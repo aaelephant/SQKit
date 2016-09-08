@@ -7,7 +7,7 @@
 //
 
 #import "TableViewController.h"
-#import "SQTableViewDelegate.h"
+#import "SQTableViewKit-Swift.h"
 
 @interface TableViewController ()
 
@@ -33,9 +33,10 @@
     self.tableView.delegate = self.mDelegate;
     self.tableView.dataSource = self.mDelegate;
     [self.originDic setValue:[self getDefaultSectionInfo] forKey:@"0"];
-    [self.mDelegate loadData:^NSDictionary *{
-        return self.originDic;
-    }];
+//    [self.mDelegate loadData:^NSDictionary *{
+//        return self.originDic;
+//    }];
+    [self.mDelegate loadData:self.originDic];
     [self.tableView reloadData];
 }
 
@@ -47,8 +48,8 @@
     
     for (int i = 0; i < 10; i++) {
         
-        SQTableViewBaseCellInfo *cellInfo = [[SQTableViewBaseCellInfo alloc]init];
-        cellInfo.cellClassName = @"SQTableViewCell";
+        SQTableViewBaseInfo *cellInfo = [[SQTableViewBaseInfo alloc]init];
+        cellInfo.cellClassName = @"SQTableViewBaseCell";
         cellInfo.cellHeight = 60;
         cellInfo.gotoNextBlock=^(id args){
             NSLog(@"@@");

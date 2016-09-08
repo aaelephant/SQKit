@@ -7,10 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A1321EE61D116A33001FB89B /* SQTableViewDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A1321EE51D116A33001FB89B /* SQTableViewDelegate.m */; };
 		A1321EE91D116ED5001FB89B /* TableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1321EE81D116ED5001FB89B /* TableViewController.m */; };
-		A1321EEC1D116FA0001FB89B /* SQTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A1321EEB1D116FA0001FB89B /* SQTableViewCell.m */; };
-		A1321EEE1D119955001FB89B /* SQTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1321EED1D119955001FB89B /* SQTableViewCell.xib */; };
+		A15AAE0D1D80FB16009DF34D /* SQTableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A15AAE0C1D80FB16009DF34D /* SQTableViewDelegate.swift */; };
 		A192CA931D11223B005D85A8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A192CA921D11223B005D85A8 /* main.m */; };
 		A192CA961D11223B005D85A8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A192CA951D11223B005D85A8 /* AppDelegate.m */; };
 		A192CA991D11223B005D85A8 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A192CA981D11223B005D85A8 /* ViewController.m */; };
@@ -39,13 +37,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		A1321EE41D116A33001FB89B /* SQTableViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQTableViewDelegate.h; sourceTree = "<group>"; };
-		A1321EE51D116A33001FB89B /* SQTableViewDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SQTableViewDelegate.m; sourceTree = "<group>"; };
 		A1321EE71D116ED5001FB89B /* TableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewController.h; sourceTree = "<group>"; };
 		A1321EE81D116ED5001FB89B /* TableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewController.m; sourceTree = "<group>"; };
-		A1321EEA1D116FA0001FB89B /* SQTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQTableViewCell.h; sourceTree = "<group>"; };
-		A1321EEB1D116FA0001FB89B /* SQTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SQTableViewCell.m; sourceTree = "<group>"; };
-		A1321EED1D119955001FB89B /* SQTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SQTableViewCell.xib; sourceTree = "<group>"; };
+		A15AAE0B1D80FB16009DF34D /* SQTableViewKit-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SQTableViewKit-Bridging-Header.h"; sourceTree = "<group>"; };
+		A15AAE0C1D80FB16009DF34D /* SQTableViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQTableViewDelegate.swift; sourceTree = "<group>"; };
 		A192CA8E1D11223B005D85A8 /* SQTableViewKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SQTableViewKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A192CA921D11223B005D85A8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		A192CA941D11223B005D85A8 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -92,8 +87,8 @@
 		A1321EC51D1169A9001FB89B /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				A1321EE41D116A33001FB89B /* SQTableViewDelegate.h */,
-				A1321EE51D116A33001FB89B /* SQTableViewDelegate.m */,
+				A15AAE0C1D80FB16009DF34D /* SQTableViewDelegate.swift */,
+				A15AAE0B1D80FB16009DF34D /* SQTableViewKit-Bridging-Header.h */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -128,9 +123,6 @@
 				A192CA981D11223B005D85A8 /* ViewController.m */,
 				A1321EE71D116ED5001FB89B /* TableViewController.h */,
 				A1321EE81D116ED5001FB89B /* TableViewController.m */,
-				A1321EEA1D116FA0001FB89B /* SQTableViewCell.h */,
-				A1321EEB1D116FA0001FB89B /* SQTableViewCell.m */,
-				A1321EED1D119955001FB89B /* SQTableViewCell.xib */,
 				A192CA9A1D11223B005D85A8 /* Main.storyboard */,
 				A192CA9D1D11223B005D85A8 /* Assets.xcassets */,
 				A192CA9F1D11223B005D85A8 /* LaunchScreen.storyboard */,
@@ -272,7 +264,6 @@
 				A192CAA11D11223B005D85A8 /* LaunchScreen.storyboard in Resources */,
 				A192CA9E1D11223B005D85A8 /* Assets.xcassets in Resources */,
 				A192CA9C1D11223B005D85A8 /* Main.storyboard in Resources */,
-				A1321EEE1D119955001FB89B /* SQTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -298,11 +289,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				A192CA991D11223B005D85A8 /* ViewController.m in Sources */,
-				A1321EE61D116A33001FB89B /* SQTableViewDelegate.m in Sources */,
 				A192CA961D11223B005D85A8 /* AppDelegate.m in Sources */,
 				A1321EE91D116ED5001FB89B /* TableViewController.m in Sources */,
+				A15AAE0D1D80FB16009DF34D /* SQTableViewDelegate.swift in Sources */,
 				A192CA931D11223B005D85A8 /* main.m in Sources */,
-				A1321EEC1D116FA0001FB89B /* SQTableViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -445,10 +435,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = SQTableViewKit/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.qbshen.SQTableViewKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "SQTableViewKit/Core/SQTableViewKit-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -456,10 +449,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = SQTableViewKit/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.qbshen.SQTableViewKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "SQTableViewKit/Core/SQTableViewKit-Bridging-Header.h";
 			};
 			name = Release;
 		};
