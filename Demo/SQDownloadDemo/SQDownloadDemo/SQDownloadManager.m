@@ -352,6 +352,11 @@ expectedTotalBytes:(int64_t)expectedTotalBytes
                 return;
             }else if (error.code == 2){
                 
+            }else if(error.code == -1002 ){
+                
+                [download cancelWithResumeData:^(NSData * _Nullable resumeData) {
+                    
+                }];
             }
             [self completeRefresh:download didFinishWithError:error atLocation:download.resultingURL task:task];
         }
