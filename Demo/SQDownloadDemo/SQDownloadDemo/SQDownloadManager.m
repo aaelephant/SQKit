@@ -8,6 +8,7 @@
 
 #import "SQDownloadManager.h"
 #import "SQDownloadOperation.h"
+#import "NSURLSession+CorrectedResumeData.h"
 
 #define IS_IOS10ORLATER ([[[UIDevice currentDevice] systemVersion] floatValue] >= 10)
 
@@ -47,7 +48,6 @@ NSString * const kSQDownloadErrorFailingURLKey = @"TCBlobDownloadFailingURLKey";
 
 @property (strong, nonatomic) NSURLSessionDownloadTask *downloadTask;
 @property (strong, nonatomic) NSURLSession *session;
-@property (strong, nonatomic) NSData *resumeData;
 
 @property (nonatomic) BOOL startImmediatly;
 @end
@@ -61,6 +61,7 @@ NSString * const kSQDownloadErrorFailingURLKey = @"TCBlobDownloadFailingURLKey";
         NSString *identifier = @"com.qbshen.SQDownloadDemo.BackgroundSession";
         NSURLSessionConfiguration * configuration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:identifier];
         configuration.HTTPMaximumConnectionsPerHost = 1;//ios 默认4个
+//        configuration.networkServiceType = NSURLNetworkServiceTypeBackground;
         [self initWithConfig:configuration];
     }
     return self;
@@ -124,11 +125,11 @@ NSString * const kSQDownloadErrorFailingURLKey = @"TCBlobDownloadFailingURLKey";
 //    NSData * resumeData = [self checkLocalResumdatatoDirectory:directory withName:name];
     NSData * resumeData = [self checkResumDataWithKey:url toDirectory:directory withName:name];
     if (resumeData) {
-//        if (IS_IOS10ORLATER) {
-//            downloadTask = [self.session downloadTaskWithCorrectResumeData:self.resumeData];
-//        } else {
+        if (IS_IOS10ORLATER) {
+            downloadTask = [self.session downloadTaskWithCorrectResumeData:resumeData];
+        } else {
             downloadTask = [self.session downloadTaskWithResumeData:resumeData];
-//        }
+        }
     }else{
         downloadTask = [self.session downloadTaskWithURL:url];
     }
@@ -160,11 +161,11 @@ NSString * const kSQDownloadErrorFailingURLKey = @"TCBlobDownloadFailingURLKey";
 
     NSData * resumeData = [self checkResumDataWithKey:url toDirectory:directory withName:name];
     if (resumeData) {
-//        if (IS_IOS10ORLATER) {
-//            downloadTask = [self.session downloadTaskWithCorrectResumeData:self.resumeData];
-//        } else {
+        if (IS_IOS10ORLATER) {
+            downloadTask = [self.session downloadTaskWithCorrectResumeData:resumeData];
+        } else {
             downloadTask = [self.session downloadTaskWithResumeData:resumeData];
-//        }
+        }
     }else{
         downloadTask = [self.session downloadTaskWithURL:url];
     }}
