@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "SQMultiDownloadController.h"
+#import "SQDownloadManager.h"
 
 @interface AppDelegate ()
 @property (strong, nonatomic) UILocalNotification *localNotification;
@@ -25,7 +25,6 @@
 
 -(void)registerLocalNotfiForDownload:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [SQMultiDownloadController sharedInstance];
     // ios8后，需要添加这个注册，才能得到授权
     if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)]) {
         UIUserNotificationType type =  UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound;
@@ -107,8 +106,7 @@
 
 -(void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)())completionHandler
 {
-    completionHandler();
-//    [[SQMultiDownloadController sharedInstance] setBackCompletionHandler:completionHandler];
+    [[SQDownloadManager sharedInstance] setBackCompletionHandler:completionHandler];
 }
 
 //- (void)application:(UIApplication *)application

@@ -58,9 +58,10 @@ NSString * const kSQDownloadErrorFailingURLKey = @"TCBlobDownloadFailingURLKey";
     self = [super init];
     if (self) {
         self.startImmediatly = YES;
-        NSString *identifier = @"com.qbshen.SQDownloadDemo.BackgroundSession";
+        NSString *identifier = @"com.qbshen.SQDownloadDemo2.BackgroundSession";
         NSURLSessionConfiguration * configuration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:identifier];
         configuration.HTTPMaximumConnectionsPerHost = 1;//ios 默认4个
+        configuration.allowsCellularAccess = YES;
 //        configuration.networkServiceType = NSURLNetworkServiceTypeBackground;
         [self initWithConfig:configuration];
     }
@@ -296,6 +297,7 @@ expectedTotalBytes:(int64_t)expectedTotalBytes
 
 -(void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didWriteData:(int64_t)bytesWritten totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
 {
+    NSLog(@"totalBytesWritten:%lld totalBytesExpectedToWrite:%lld",totalBytesWritten,totalBytesExpectedToWrite);
     SQDownload * download = self.downloads[@(downloadTask.taskIdentifier)];
 //    [download writeCacheData:downloadTask.];
     
@@ -316,6 +318,12 @@ expectedTotalBytes:(int64_t)expectedTotalBytes
         }
         return ;
     });
+}
+
+- (NSNumber *)freeDiskSpace
+{
+    NSDictionary *fattributes = [[NSFileManager defaultManager] attributesOfFileSystemForPath:NSHomeDirectory() error:nil];
+    return [fattributes objectForKey:NSFileSystemFreeSize];
 }
 
 -(void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(NSURL *)location

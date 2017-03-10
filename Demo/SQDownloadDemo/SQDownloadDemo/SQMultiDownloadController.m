@@ -13,7 +13,7 @@
 @interface SQMultiDownloadController ()
 
 @property (nonatomic) NSMutableArray<SQEntityModel*> * entityModels;
-
+@property (nonatomic, copy) void(^backCompletionHandler)();
 @end
 
 @implementation SQMultiDownloadController
@@ -75,14 +75,16 @@
 }
 -(NSArray*)downUrls
 {
-    return @[@"http://mediags.download.vr.moguv.com/20161205/0841ac674aa747669858cb263e3782b8/0841ac674aa747669858cb263e3782b8_sphere2kTV.ts?token=ba9fc79bdca1236a5c4ef31b7893b685&ts=1485060981542",
+    return @[
+             @"http://sw.bos.baidu.com/sw-search-sp/software/797b4439e2551/QQ_mac_5.0.2.dmg",
+//             @"http://mediags.download.vr.moguv.com/20161205/0841ac674aa747669858cb263e3782b8/0841ac674aa747669858cb263e3782b8_sphere2kTV.ts?token=ba9fc79bdca1236a5c4ef31b7893b685&ts=1485060981542",
              @"http://mediags.download.vr.moguv.com/20161224/5f61e4302e744985aeaf2752730aa2c2/5f61e4302e744985aeaf2752730aa2c2_oct2kTV.ts?token=d6b9999d3d4c6de90ed54965e0a631a2&ts=1484820737748",
-             @"http://mediags.download.vr.moguv.com/20170116/f91c7887f37a4ab8a7539a16b20ee19d/f91c7887f37a4ab8a7539a16b20ee19d_oct2kTV.ts?token=2fe561e2ef54cc4db9082e869acb7345&ts=1484820880036",
+//             @"http://mediags.download.vr.moguv.com/20170116/f91c7887f37a4ab8a7539a16b20ee19d/f91c7887f37a4ab8a7539a16b20ee19d_oct2kTV.ts?token=2fe561e2ef54cc4db9082e869acb7345&ts=1484820880036",
              @"http://mediags.download.vr.moguv.com/20161219/acfcf992c066490c94bcf4565f7501b0/acfcf992c066490c94bcf4565f7501b0_oct2kTV.ts?token=3860504f5847a176623ebad39107517d&ts=1484820933261",
-             @"http://mediags.download.vr.moguv.com/20170105/68ea08ca5b94437f961faae90519648a/68ea08ca5b94437f961faae90519648a_oct2kTV.ts?token=b2918a771b82d6c51a751269953332c7&ts=1484825576484",
-             @"http://mediags.download.vr.moguv.com/20170110/2bb51b3019664c24abdfe1c783092f66/2bb51b3019664c24abdfe1c783092f66_oct2kTV.ts?token=62a2a341f560d70e86190f1f61292367&ts=1484825582205",
-             @"http://mediags.download.vr.moguv.com/20170105/1d912bd35cb745e08b902413cd3d8035/1d912bd35cb745e08b902413cd3d8035_oct2kTV.ts?token=4c596cfe634257f13ca839bcc092aaf8&ts=1484825585636",
-             @"http://mediags.download.vr.moguv.com/20170105/d3bf681ee96a4db1bbd1f8f63e99c553/d3bf681ee96a4db1bbd1f8f63e99c553_oct2kTV.ts?token=8d1b65dc7f4ed35976b5a2b27ee0e492&ts=1484825589873",
+//             @"http://mediags.download.vr.moguv.com/20170105/68ea08ca5b94437f961faae90519648a/68ea08ca5b94437f961faae90519648a_oct2kTV.ts?token=b2918a771b82d6c51a751269953332c7&ts=1484825576484",
+//             @"http://mediags.download.vr.moguv.com/20170110/2bb51b3019664c24abdfe1c783092f66/2bb51b3019664c24abdfe1c783092f66_oct2kTV.ts?token=62a2a341f560d70e86190f1f61292367&ts=1484825582205",
+//             @"http://mediags.download.vr.moguv.com/20170105/1d912bd35cb745e08b902413cd3d8035/1d912bd35cb745e08b902413cd3d8035_oct2kTV.ts?token=4c596cfe634257f13ca839bcc092aaf8&ts=1484825585636",
+//             @"http://mediags.download.vr.moguv.com/20170105/d3bf681ee96a4db1bbd1f8f63e99c553/d3bf681ee96a4db1bbd1f8f63e99c553_oct2kTV.ts?token=8d1b65dc7f4ed35976b5a2b27ee0e492&ts=1484825589873",
              ];
 }
 
@@ -164,6 +166,11 @@
 
 -(void)startDownload:(SQEntityModel * )entityModel
 {
+    for (SQEntityModel* model in self.entityModels) {
+        if (model.downloader && model.status == SQDownloadStatusDownloading) {
+            [self pauseDownload:model];
+        }
+    }
     __weak typeof(self) weakSelf = self;
     entityModel.status = SQDownloadStatusReady;
     entityModel.progressL.text = @"ready";
@@ -183,13 +190,14 @@
 
     NSString* fileName = [NSString stringWithFormat:@"%@.ts",entityModel.uuid];
     SQDownload * download = [[SQDownloadManager sharedInstance] downloadFileAtURL:[NSURL URLWithString:entityModel.downloadUrl] toDirectory:[NSURL URLWithString:entityModel.pathToFile] withName:fileName progression:^(float progress, int64_t totalBytesWritten, int64_t totalBytesExpectedToWrite) {
-//        NSLog(@"progress: %f",progress);
+        
         [weakSelf progressBlock:entityModel progress:progress onceToken:&onceToken];
     } completion:^(NSError * _Nullable error, NSURL * _Nullable location) {
         NSLog(@"error: %@\n location: %@",error.description ,location.absoluteString);
         if (!error) {
             entityModel.progressL.text = @"完成";
             entityModel.status = SQDownloadStatusDown;
+            [weakSelf startNextDown];
 //            [weakSelf.tableView reloadData];
         }else{
             if (error.code == 2) {
@@ -205,9 +213,19 @@
     entityModel.downloader = download;
 }
 
+-(void)startNextDown
+{
+    for (SQEntityModel* model in self.entityModels) {
+        if (!model.downloader&&model.status != SQDownloadStatusDown) {
+            [self startDownload:model];
+            break;
+        }
+    }
+}
+
 -(void)progressBlock:(SQEntityModel * )entityModel progress:(CGFloat)progress onceToken:(dispatch_once_t*)onceToken
 {
-    NSLog(@"taskIdentifier:%ld",entityModel.downloader.downloadTask.taskIdentifier);
+    NSLog(@"taskIdentifier:%ld progress:%f",entityModel.downloader.downloadTask.taskIdentifier,progress);
     if (entityModel.status == SQDownloadStatusPause) {
         
     }else if (entityModel.status == SQDownloadStatusReady || entityModel.status == SQDownloadStatusDownloading){
@@ -235,6 +253,7 @@
 //    }];
     entityModel.progressL.text = @"暂停";
     entityModel.status = SQDownloadStatusPause;
+    entityModel.downloader = nil;
 //    [self.tableView reloadData];
 }
 
