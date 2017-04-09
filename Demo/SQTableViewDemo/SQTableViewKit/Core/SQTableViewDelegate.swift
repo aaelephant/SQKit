@@ -13,29 +13,29 @@ class SQTableViewDelegate: NSObject, UITableViewDelegate,UITableViewDataSource {
     
     var sectionDataDic = NSMutableDictionary()
     
-    func loadData(originData:NSMutableDictionary) -> Void {
+    func loadData(_ originData:NSMutableDictionary) -> Void {
         sectionDataDic = originData
     }
     
-    func kSection(section:NSInteger) -> NSString {
+    func kSection(_ section:NSInteger) -> NSString {
         return NSString(format: "%ld", section)
     }
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return (sectionDataDic.count)
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let sectionInfo = sectionDataDic[kSection(section)]
-        return (sectionInfo?.cellDataArray.count)!
+        return ((sectionInfo as AnyObject).cellDataArray.count)
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let sectionInfo = sectionDataDic[kSection(indexPath.section)]
         
-        let cellInfo = sectionInfo!.cellDataArray[indexPath.row] as! SQTableViewBaseInfo;
+        let cellInfo = (sectionInfo! as AnyObject).cellDataArray[indexPath.row] as! SQTableViewBaseInfo;
         cellInfo.indexPath = indexPath
-        var cell = tableView.dequeueReusableCellWithIdentifier(cellInfo.cellNibName.isEmpty ? cellInfo.cellNibName : cellInfo.cellClassName);
+        var cell = tableView.dequeueReusableCell(withIdentifier: cellInfo.cellNibName.isEmpty ? cellInfo.cellNibName : cellInfo.cellClassName);
         if (nil == cell) {
             cell = cellForSection(cellInfo , tableView: tableView)
         }
@@ -43,15 +43,15 @@ class SQTableViewDelegate: NSObject, UITableViewDelegate,UITableViewDataSource {
         return cell!;
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let sectionInfo = sectionDataDic[kSection(indexPath.section)]
         
-        let cellInfo = sectionInfo!.cellDataArray[indexPath.row] as! SQTableViewBaseInfo;
+        let cellInfo = (sectionInfo! as AnyObject).cellDataArray[indexPath.row] as! SQTableViewBaseInfo;
         
         return cellInfo.cellHeight
     }
     
-    func cellForSection(cellInfo:SQTableViewBaseInfo, tableView:UITableView) -> SQTableViewBaseCell {
+    func cellForSection(_ cellInfo:SQTableViewBaseInfo, tableView:UITableView) -> SQTableViewBaseCell {
         var cell = SQTableViewBaseCell()
         let nibName = cellInfo.cellNibName
         let className = cellInfo.cellClassName
@@ -63,15 +63,15 @@ class SQTableViewDelegate: NSObject, UITableViewDelegate,UITableViewDataSource {
         return cell
     }
     
-    func loadNibCellWithNibName(nibName:String, tableView:UITableView, reuseIdentifier: String) -> SQTableViewBaseCell {
+    func loadNibCellWithNibName(_ nibName:String, tableView:UITableView, reuseIdentifier: String) -> SQTableViewBaseCell {
         let nib = UINib(nibName: nibName, bundle: nil)
-        tableView.registerNib(nib, forCellReuseIdentifier: reuseIdentifier)
-        return tableView.dequeueReusableCellWithIdentifier(reuseIdentifier) as! SQTableViewBaseCell
+        tableView.register(nib, forCellReuseIdentifier: reuseIdentifier)
+        return tableView.dequeueReusableCell(withIdentifier: reuseIdentifier) as! SQTableViewBaseCell
     }
     
-    func swiftCellClassFromString(className: String, cellStyle:UITableViewCellStyle, reuseIdentifier: String) -> UITableViewCell! {
+    func swiftCellClassFromString(_ className: String, cellStyle:UITableViewCellStyle, reuseIdentifier: String) -> UITableViewCell! {
         // get the project name
-        if  let appName: String = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleName") as! String? {
+        if  let appName: String = Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as! String? {
             //拼接控制器名
             let classStringName = "\(appName).\(className)"
             //将控制名转换为类
@@ -85,11 +85,11 @@ class SQTableViewDelegate: NSObject, UITableViewDelegate,UITableViewDataSource {
     }
 
     
-    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let sectionInfo = sectionDataDic[kSection(section)]
-        let viewInfo = (sectionInfo?.headViewInfo)! as SQTableViewHeadViewInfo
+        let viewInfo = ((sectionInfo as! SQTableViewSectionInfo).headViewInfo) as SQTableViewHeadViewInfo
         
-        var cell = tableView.dequeueReusableCellWithIdentifier(viewInfo.cellNibName.isEmpty ? viewInfo.cellNibName : viewInfo.cellClassName)
+        var cell = tableView.dequeueReusableCell(withIdentifier: viewInfo.cellNibName.isEmpty ? viewInfo.cellNibName : viewInfo.cellClassName)
         if nil == cell {
             cell = cellForSection(viewInfo, tableView: tableView)
         }
@@ -98,11 +98,11 @@ class SQTableViewDelegate: NSObject, UITableViewDelegate,UITableViewDataSource {
         return cell
     }
     
-    func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let sectionInfo = sectionDataDic[kSection(section)]
-        let viewInfo = (sectionInfo?.footViewInfo)! as SQTableViewFootViewInfo
+        let viewInfo = ((sectionInfo as! SQTableViewSectionInfo).footViewInfo) as SQTableViewFootViewInfo
         
-        var cell = tableView.dequeueReusableCellWithIdentifier(viewInfo.cellNibName.isEmpty ? viewInfo.cellNibName : viewInfo.cellClassName)
+        var cell = tableView.dequeueReusableCell(withIdentifier: viewInfo.cellNibName.isEmpty ? viewInfo.cellNibName : viewInfo.cellClassName)
         if nil == cell {
             cell = cellForSection(viewInfo, tableView: tableView)
         }
@@ -111,41 +111,41 @@ class SQTableViewDelegate: NSObject, UITableViewDelegate,UITableViewDataSource {
         return cell
     }
     
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         let sectionInfo = sectionDataDic[kSection(section)]
-        let viewInfo = (sectionInfo?.footViewInfo)! as SQTableViewFootViewInfo
+        let viewInfo = ((sectionInfo as! SQTableViewSectionInfo).footViewInfo) as SQTableViewFootViewInfo
         return viewInfo.cellHeight
     }
     
-    func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
-        return UITableViewCellEditingStyle.Delete
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+        return UITableViewCellEditingStyle.delete
     }
     
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == UITableViewCellEditingStyle.Delete {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == UITableViewCellEditingStyle.delete {
             let sectionInfo = sectionDataDic[kSection(indexPath.section)]
             
-            let cellInfo = sectionInfo!.cellDataArray[indexPath.row] as! SQTableViewBaseInfo;
-            if nil != cellInfo.willDeleteBlock {
-                cellInfo.willDeleteBlock!(args: cellInfo)
-            }
-            sectionInfo?.cellDataArray.removeObject(cellInfo)
+            let cellInfo = (sectionInfo! as AnyObject).cellDataArray[indexPath.row] as! SQTableViewBaseInfo;
+//            if cellInfo.willDeleteBlock {
+                cellInfo.willDeleteBlock(cellInfo)
+//            }
+            (sectionInfo as AnyObject).cellDataArray.remove(cellInfo)
             tableView.reloadData()        
         }
     }
     
-    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return canEdit
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let sectionInfo = sectionDataDic[kSection(indexPath.section)]
         
-        let cellInfo = sectionInfo!.cellDataArray[indexPath.row] as! SQTableViewBaseInfo;
+        let cellInfo = (sectionInfo! as AnyObject).cellDataArray[indexPath.row] as! SQTableViewBaseInfo;
 
-        if nil != cellInfo.gotoNextBlock {
-            cellInfo.gotoNextBlock!(args: cellInfo)
-        }
+//        if cellInfo.gotoNextBlock {
+            cellInfo.gotoNextBlock(cellInfo)
+//        }
     }
     
 }
@@ -159,15 +159,23 @@ class SQTableViewSectionInfo: NSObject {
 }
 
 class SQTableViewBaseInfo : NSObject {
+
     var cellNibName = String()
     var cellClassName = String()
-    var cellStyle = UITableViewCellStyle.Default
-    var indexPath = NSIndexPath()
+    var cellStyle = UITableViewCellStyle.default
+    var indexPath = IndexPath()
     ///  这是一个函数闭包变量
-    typealias  myfunction = (args:AnyObject) ->Void;
+    typealias  myfunction = (_ args:AnyObject) ->Void;
     //  定义函数变量
-    var gotoNextBlock = myfunction?()
-    var willDeleteBlock = myfunction?()
+    var gotoNextBlock:((_ args:AnyObject) -> Void) = { (args:AnyObject) in
+        
+    }
+
+    var willDeleteBlock:((_ args:AnyObject) -> Void) = { (args:AnyObject) in
+        
+    }
+//    var gotoNextBlock = (AnyObject) ->Void()//myfunction()
+//    var willDeleteBlock = (AnyObject) ->Void()//myfunction()
     
     var cellWidth:CGFloat = 0.0;
     var cellHeight:CGFloat = 0.0;
@@ -189,7 +197,7 @@ class SQTableViewCellInfo : SQTableViewBaseInfo{
 //@objc
 class SQTableViewBaseCell: UITableViewCell {
 
-    func fillData(info:SQTableViewBaseInfo) -> Void {
+    func fillData(_ info:SQTableViewBaseInfo) -> Void {
 
     }
 }
